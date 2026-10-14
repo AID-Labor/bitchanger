@@ -45,7 +45,7 @@ import javafx.stage.WindowEvent;
  * @author Tim M\u00FChle
  *
  * @since Bitchanger 0.1.0
- * @version 1.0.4
+ * @version 1.1.0
  * 
  * @see ConverterView
  * @see ConverterController
@@ -60,7 +60,7 @@ import javafx.stage.WindowEvent;
  * @author Tim Muehle
  *
  * @since Bitchanger 0.1.0
- * @version 1.0.4
+ * @version 1.1.0
  * 
  * @see ConverterView
  * @see ConverterController
@@ -86,7 +86,7 @@ public class PrimaryFXApp extends Application implements ControllableApplication
 	public static final String BITOPERATIONS_VIEW_KEY = "bitoperations-view";
 	
 	/** <!-- $LANGUAGE=DE -->	Aktuelle Version des Bitchangers */
-	public static final String VERSION = "1.0.4";
+	public static final String VERSION = "1.1.0";
 	
 	/** <!-- $LANGUAGE=DE -->	Aktuelle Instanz dieser Klasse */
 	private static PrimaryFXApp instance;

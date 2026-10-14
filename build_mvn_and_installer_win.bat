@@ -1,46 +1,79 @@
 @echo off
-rem Dieses Skript erstellt mit Hilfe von Maven eine ausfuehrbare JAR-Datei aus dem Java-Projekt, kopiert diese in das
-rem Verzeichnis "installer\source" und erzeugt dann mit einem weiteren Skript Plattformspezifische Installer fuer Windows.
-rem Es werden zwei Installer in den gaengigen Formaten bereitgestellt (.exe und .msi)
+setlocal EnableDelayedExpansion
+
+rem Dieses Skript erstellt mit Hilfe von Maven eine ausfuehrbare JAR-Datei aus dem Java-Projekt,
+rem kopiert diese in das Verzeichnis "installer\source\Windows" und erzeugt dann mit einem weiteren
+rem Skript plattformspezifische Installer fuer Windows (.exe und .msi).
+
+rem ---- Praefluege -----------------------------------------------------------------------------------------------------
+
+where mvn >nul 2>&1 || (
+    echo Fehler: Maven ^(mvn^) nicht gefunden.
+    exit /b 1
+)
+
+where jpackage >nul 2>&1 || (
+    echo Fehler: jpackage nicht gefunden. Bitte mit JDK 25+ verwenden.
+    exit /b 1
+)
+
+if not exist "Logo\Bitchanger.ico" (
+    echo Fehler: Logo\Bitchanger.ico nicht gefunden.
+    exit /b 1
+)
+
+if not exist "LICENSE.txt" (
+    echo Fehler: LICENSE.txt nicht gefunden.
+    exit /b 1
+)
 
 rem ---- Benoetigte Informationen in Variablen speichern ----------------------------------------------------------------
 
-rem Mit den folgeneden Variablen koennen die Grundlegenden Daten fuer das Projekt eingestellt werden:
-set NAME=Bitchanger
-set DESCRIPTION="Rechner fuer beliebige Zahlensysteme"
-set VERSION=1.0.4
-set VENDOR="Entwicklungsprojekt_EB2020 by Tim Muehle and Moritz Wolter"
+set "NAME=Bitchanger"
+set "DESCRIPTION=Rechner fuer beliebige Zahlensysteme"
+set "VERSION=1.1.0"
+set "VENDOR=Entwicklungsprojekt_EB2020 by Tim Muehle und Moritz Wolter"
+set "COPYRIGHT=Copyright 2020 (c) Tim Muehle & Moritz Wolter"
 
-set INPUT=installer\source\Windows
-set OUT=installer\%VERSION%\Windows
+set "INPUT=installer\source\Windows"
+set "OUT=installer\%VERSION%\Windows"
 
 
 rem ---- Maven build -----------------------------------------------------------------------------------------------------
 echo.
-echo Maven Bulid durchfuehren
+echo Maven Build durchfuehren
 echo.
-@echo on
 call mvn clean install
-@echo off
+if errorlevel 1 (
+    echo Fehler: Maven Build fehlgeschlagen.
+    exit /b 1
+)
 
 
 rem ---- JARs sichern ----------------------------------------------------------------------------------------------------
+echo.
 echo JAR-Dateien kopieren
-if not exist %INPUT%\%VERSION% mkdir %INPUT%\%VERSION%
-if exist %INPUT%\jpackage del /Q %INPUT%\jpackage	rem Eingabeordner fuer jpackage leeren
-mkdir %INPUT%\jpackage
-@echo on
-copy target\bitchanger-%VERSION%-jar-with-dependencies.jar %INPUT%\%VERSION%\bitchanger-%VERSION%-jar-with-dependencies.jar
-copy target\bitchanger-%VERSION%.jar %INPUT%\%VERSION%\bitchanger-%VERSION%.jar
-copy target\bitchanger-%VERSION%-jar-with-dependencies.jar %INPUT%\jpackage\bitchanger-%VERSION%.jar
-@echo off
+
+if not exist "%OUT%" mkdir "%OUT%"
+if not exist "%INPUT%\%VERSION%" mkdir "%INPUT%\%VERSION%"
+if exist "%INPUT%\jpackage" rd /S /Q "%INPUT%\jpackage"  rem Eingabeordner fuer jpackage leeren
+mkdir "%INPUT%\jpackage"
+
+copy "target\bitchanger-%VERSION%-jar-with-dependencies.jar" "%INPUT%\%VERSION%\bitchanger-%VERSION%-jar-with-dependencies.jar" >nul
+copy "target\bitchanger-%VERSION%.jar" "%INPUT%\%VERSION%\bitchanger-%VERSION%.jar" >nul
+copy "target\bitchanger-%VERSION%-jar-with-dependencies.jar" "%INPUT%\jpackage\bitchanger-%VERSION%.jar" >nul
 
 
 rem ---- Installer erzeugen ----------------------------------------------------------------------------------------------
 echo.
 echo Installer fuer Windows werden erzeugt.
-@echo on
-build_installer_win.bat VERSION=%VERSION% INPUT=%INPUT% OUT=%OUT%
-@echo off
 echo.
 
+call build_installer_win.bat VERSION=%VERSION% INPUT=%INPUT% OUT=%OUT%
+if errorlevel 1 (
+    echo Fehler: Windows-Installer-Erzeugung fehlgeschlagen.
+    exit /b 1
+)
+
+echo.
+echo Fertig.

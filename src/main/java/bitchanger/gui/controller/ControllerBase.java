@@ -11,7 +11,9 @@ package bitchanger.gui.controller;
 import java.util.Map;
 
 import bitchanger.gui.views.Viewable;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -166,9 +168,11 @@ public abstract class ControllerBase<T extends Controllable> implements Controll
 			target.fireEvent(released);
 		}
 		else if(scene != null) {
-			scene.processKeyEvent(pressed);
-			scene.processKeyEvent(typed);
-			scene.processKeyEvent(released);
+			Node focusOwner = scene.getFocusOwner();
+			EventTarget eventTarget = (focusOwner != null && focusOwner.getScene() == scene) ? focusOwner : scene;
+			Event.fireEvent(eventTarget, pressed);
+			Event.fireEvent(eventTarget, typed);
+			Event.fireEvent(eventTarget, released);
 		}
 		
 	}

@@ -15,10 +15,9 @@ Delivery:
 
 Delivery of the software:
 The program is packaged into a JAR file including all dependencies using the build tool Maven.
-Afterwards the command line tool jpackage (openJDK 14) is used to create an installer for Windows, macOS
+Afterwards the command line tool jpackage is used to create an installer for Windows, macOS
 and Linux, which also contains the Java-Runtime that is required for execution.
-Due to licensing terms, only Amazon Corretto (currently version 11) and the openJDK
-(openJavaFX 11 and openJDK 14 for jpackage) are used.
+The project is built with Java 25 and OpenJFX 25.
 
 -------------------------------------------------------------------------------------------------------
 
@@ -49,10 +48,9 @@ implementiert ist.
 Auslieferung der Software:
 
 Das Programm wird mit dem Buildtool Maven in eine JAR-Datei inklusive aller Abhängigkeiten gepackt.
-Im Anschluss wird mit dem Kommandozeilentool jpackage (openJDK 14) ein Installer für Windows, macOS
+Im Anschluss wird mit dem Kommandozeilentool jpackage ein Installer für Windows, macOS
 und Linux zur Auslieferung bereitgestellt, der auch die zur Ausführung benötigte Java-Runtime enthält.
-Wegen Lizenzbestimmungen wird ausschließlich Amazon Corretto (aktuell Version 11) und das openJDK
-(openJavaFX 11 und openJDK 14 für jpackage) verwendet.
+Das Projekt wird mit Java 25 und OpenJFX 25 gebaut.
 
 -------------------------------------------------------------------------------------------------------
 
